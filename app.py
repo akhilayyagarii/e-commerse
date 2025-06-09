@@ -10,7 +10,6 @@ import os
 
 load_dotenv()
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "fallback-secret-key")
 
 # MongoDB setup
 client = MongoClient(os.getenv("MONGO_URI"), tlsCAFile=certifi.where())
