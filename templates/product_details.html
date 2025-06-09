@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ product.name }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .image-section {
+      display: flex;
+      gap: 20px;
+    }
+
+    .thumbnails {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .thumbnails img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border 0.2s;
+    }
+
+    .thumbnails img:hover,
+    .thumbnails img.active {
+      border: 2px solid #007bff;
+    }
+
+    .main-image {
+      flex: 1;
+      text-align: center;
+    }
+
+    .main-image img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .product-info {
+      margin-top: 30px;
+    }
+
+    .product-info h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 22px;
+      color: #28a745;
+      margin: 10px 0;
+    }
+
+    .description {
+      margin: 10px 0;
+      color: #333;
+    }
+
+    .btn-cart {
+      background-color: #ff6f00;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn-cart:hover {
+      background-color: #ff8f00;
+    }
+
+    .review-section {
+      margin-top: 40px;
+    }
+
+    .review {
+      background: #f9f9f9;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+    }
+
+    form textarea, form input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    form button {
+      padding: 10px 18px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+      .image-section {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .thumbnails {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .main-image img {
+        max-width: 100%;
+      }
+
+      .product-info {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Image Section -->
+    <div class="image-section">
+      <!-- Thumbnails (include main image first) -->
+      <div class="thumbnails">
+        <img src="{{ product.image_url }}" class="active" onclick="setMainImage(this)" onmouseover="setMainImage(this)">
+        {% for img in product.additional_images %}
+          <img src="{{ img }}" onclick="setMainImage(this)" onmouseover="setMainImage(this)">
+        {% endfor %}
+      </div>
+
+      <!-- Main Image -->
+      <div class="main-image">
+        <img id="mainProductImage" src="{{ product.image_url }}" alt="{{ product.name }}">
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="product-info">
+      <h1>{{ product.name }}</h1>
+      <p class="price">₹{{ product.price }}</p>
+      <p class="description">{{ product.description }}</p>
+
+      <form action="{{ url_for('add_to_cart', product_id=product.id, category=product.category) }}" method="POST">
+        <button class="btn-cart" type="submit">Add to Cart</button>
+      </form>
+    </div>
+
+    <!-- Reviews -->
+    <div class="review-section">
+      <h2>Customer Reviews</h2>
+      {% if product.reviews %}
+        {% for review in product.reviews %}
+          <div class="review">
+            <strong>{{ review.user }}</strong> - ⭐ {{ review.rating }}<br>
+            <p>{{ review.comment }}</p>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No reviews yet.</p>
+      {% endif %}
+
+      <h3>Write a Review</h3>
+      <form method="POST" action="{{ url_for('submit_review', product_id=product.id) }}">
+        <input type="hidden" name="category" value="{{ product.category }}">
+        <label for="rating">Rating (1-5):</label>
+        <input type="number" name="rating" min="1" max="5" required>
+        <label for="comment">Comment:</label>
+        <textarea name="comment" rows="3" required></textarea>
+        <button type="submit">Submit Review</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function setMainImage(imgElement) {
+      const mainImage = document.getElementById("mainProductImage");
+      mainImage.src = imgElement.src;
+
+      const thumbnails = document.querySelectorAll(".thumbnails img");
+      thumbnails.forEach(thumb => thumb.classList.remove("active"));
+      imgElement.classList.add("active");
+    }
+  </script>
+</body>
+</html>

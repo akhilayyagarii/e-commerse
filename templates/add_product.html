@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Product</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+
+    form {
+      max-width: 400px;
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Add New Product</h2>
+
+  <form method="POST" action="{{ url_for('add_product') }}">
+
+    <label>Product Name:</label>
+    <input type="text" name="name" required>
+
+
+
+
+    
+      <label>Select Category:</label><br>
+      <select name="category" required>
+        <option value="groceries">Groceries</option>
+        <option value="beauty">Beauty</option>
+        <option value="homeneeds">Home Needs</option>
+        <option value="electronics">Electronics</option>
+        <option value="jewellary">Jewellary</option>
+      </select><br><br>
+    
+      <label>Price:</label><br>
+      <input type="text" name="price" required><br><br>
+    
+      <label>Main Image URL:</label>
+      <input type="text" name="image_url" required><br><br>
+      
+      <label>Additional Image URLs (comma-separated):</label>
+      <input type="text" name="additional_images"><br><br>
+     
+
+      <label>Description:</label><br>
+      <textarea name="description"></textarea><br><br>
+    
+      <button type="submit">Add Product</button>
+    </form>
+    
+
+  <a href="{{ url_for('home') }}">Back to Categories</a>
+
+</body>
+</html>

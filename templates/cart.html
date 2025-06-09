@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Cart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f8f9fa;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .cart-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 90%;
+      max-width: 300px;
+      position: relative;
+    }
+
+    .product-image {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      object-fit: cover;
+      height: 150px;
+    }
+
+    .product-name {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .price, .quantity, .subtotal {
+      margin: 5px 0;
+    }
+
+    .subtotal {
+      font-weight: bold;
+      color: #28a745;
+    }
+
+    .total {
+      text-align: center;
+      font-size: 1.4em;
+      margin-top: 30px;
+    }
+
+    .quantity-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .quantity-controls form {
+      display: inline;
+    }
+
+    .quantity-controls button {
+      padding: 4px 8px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .remove-form {
+      margin-top: 10px;
+    }
+
+    .remove-form button {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 30px;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+   <link rel="stylesheet" href="../static/style.css" > 
+</head>
+<body>
+
+ <!-- Navbar/Header -->
+   <header class="navbar">
+    <div class="left-section user-dropdown">
+      <span class="username" onclick="toggleDropdown()">{{ session['username'] }}</span>
+      <div class="dropdown-content" id="userDropdown">
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </div>
+    </div>
+    
+
+    <form method="GET" action="{{ url_for('products') }}" class="center-section search-bar">
+      <input type="text" name="q" placeholder="Search products or categories..." required />
+      <button type="submit">🔍</button>
+    </form>
+    
+
+
+
+    <nav class="right-section nav-links">
+      <a href="/home">Home</a>
+      <a href="/profile">Profile</a>
+      <a href="/cart">Cart</a>
+    </nav>
+  </header>
+
+  <h1>Your Cart</h1>
+
+  {% if cart %}
+    <div class="cart-container">
+      {% for item in cart %}
+        <div class="card">
+          <img src="{{ item.image_url }}" alt="{{ item.name }}" class="product-image">
+          <div class="product-name">{{ item.name }}</div>
+          <div class="price">Unit Price: ₹{{ "%.2f"|format(item.price) }}</div>
+          <div class="quantity">Quantity:
+            {% if item.category == 'groceries' %}
+              <div class="quantity-controls">
+                <form method="POST" action="/update_quantity">
+                  <input type="hidden" name="_id" value="{{ item._id }}">
+                  <input type="hidden" name="action" value="decrease">
+                  <button type="submit">−</button>
+                </form>
+                {{ item.quantity }}
+                <form method="POST" action="/update_quantity">
+                  <input type="hidden" name="_id" value="{{ (item._id) }}">
+                  <input type="hidden" name="action" value="increase">
+                  <button type="submit">+</button>
+                </form>
+              </div>
+            {% else %}
+              {{ item.quantity }}
+            {% endif %}
+          </div>
+          <div class="subtotal">
+            {% if item.price is defined and item.quantity is defined %}
+            Subtotal: ₹{{ "%.2f"|format(item.price * item.quantity) }}
+            {% else %}
+                Subtotal: N/A
+            {% endif %}
+        </div>
+        
+
+          <form class="remove-form" method="POST" action="/remove_from_cart">
+            <input type="hidden" name="_id" value="{{ item._id  }}">
+            <button type="submit">Remove</button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="total">
+      {% set total = namespace(value=0) %}
+      {% for item in cart %}
+        {% set total.value = total.value + (item.price * item.quantity) %}
+      {% endfor %}
+      <strong>Total:</strong>  ₹{{ "%.2f"|format(total.value) }}
+    </div>
+  {% else %}
+    <p style="text-align:center;">Your cart is empty.</p>
+  {% endif %}
+
+  <a href="{{ url_for('home') }}">← Back to Home</a>
+
+</body>
+</html>

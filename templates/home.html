@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping Market</title>
+ <link rel="stylesheet" href="../static/style.css" > 
+</head>
+<body>
+
+   <!-- Navbar/Header -->
+   <header class="navbar">
+    <div class="left-section user-dropdown">
+      <span class="username" onclick="toggleDropdown()">{{ session['username'] }}</span>
+      <div class="dropdown-content" id="userDropdown">
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </div>
+    </div>
+    
+
+    <form method="GET" action="{{ url_for('products') }}" class="center-section search-bar">
+      <input type="text" name="q" placeholder="Search products or categories..." required />
+      <button type="submit">🔍</button>
+    </form>
+    
+
+
+
+    <nav class="right-section nav-links">
+      <a href="/home">Home</a>
+      <a href="/profile">Profile</a>
+      <a href="/cart">Cart</a>
+    </nav>
+  </header>
+    
+
+  <main>
+    <section class="hero-slider">
+  <div class="slide" style="background-image: url('../static/image/7759804.jpg');"></div>
+  <div class="slide" style="background-image: url('../static/image/9556160.jpg');"></div>
+  <div class="slide" style="background-image: url('../static/image/10597066.jpg');"></div>
+  <div class="slide" style="background-image: url('../static/image/f2ed247d-c525-4358-81c5-aa1d7d257c69.jpg');"></div>
+</section>
+
+
+
+<section class="categories-section">
+  <h2>Shop by Category</h2>
+  <div class="categories">
+    <div class="category">
+      <a href="/products?category=groceries"><img src="../static/image/basket-full-vegetables.jpg" alt="Groceries"><p>Groceries</p></a>
+    </div>
+    <div class="category">
+      <a href="/products?category=beauty"><img src="../static/image/collection-beauty-products-with-copy-space.jpg" alt="Beauty"><p>Beauty</p></a>
+    </div>
+    <div class="category">
+      <a href="/products?category=homeneeds"><img src="../static/image/top-view-zero-waste-assortment.jpg" alt="Home Needs"><p>Home Needs</p></a>
+    </div>
+    <div class="category">
+      <a href="/products?category=electronics"><img src="../static/image/modern-stationary-collection-arrangement.jpg" alt="Electronics"><p>Electronics</p></a>
+    </div>
+    <div class="category">
+      <a href="/products?category=jewellary"><img src="../static/image/luxury-shine-diamonds-digital-art.jpg" alt="Jewellary"><p>Jewellary</p></a>
+    </div>
+  </div>
+</section>
+
+  </main>
+
+  <footer>
+    <!-- Footer Section -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3>About Us</h3>
+      <p>Welcome to SuperMart  – your one-stop destination for daily essentials, groceries, and more. We are committed to providing high-quality products at the best prices.</p>
+    </div>
+
+    <div class="footer-column">
+      <h3>Customer Service</h3>
+      <ul>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Track Your Order</a></li>
+        <li><a href="#">Return & Refunds</a></li>
+        <li><a href="#">Shipping Info</a></li>
+        <li><a href="#">FAQs</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Policies</h3>
+      <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms & Conditions</a></li>
+        <li><a href="#">Return Policy</a></li>
+        <li><a href="#">Cookie Policy</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Contact Us</h3>
+      <p>Email: support@supermart.com</p>
+      <p>Phone: +1 (800) 123-4567</p>
+      <p>123 Market Street, Freshville, CA 90210</p>
+      <div class="social-links">
+        <a href="#">🌐</a>
+        <a href="#">📸</a>
+        <a href="#">🐦</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Supermart. All rights reserved.</p>
+  </div>
+</footer>
+
+  </footer>
+  <script>
+    function toggleDropdown() {
+      const dropdown = document.getElementById("userDropdown");
+      dropdown.classList.toggle("show");
+    }
+  
+    // Close dropdown when clicking outside
+    window.addEventListener("click", function(event) {
+      const dropdown = document.getElementById("userDropdown");
+      const username = document.querySelector(".username");
+      if (!username.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove("show");
+      }
+    });
+  </script>
+  
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
